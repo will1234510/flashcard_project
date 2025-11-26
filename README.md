@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Nina's Flashcards
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, high-performance web application designed for efficient studying and knowledge retention. Nina's Flashcards provides a streamlined, distraction-free interface for creating, organizing, and reviewing flashcards with support for both text and rich media.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+### Core Functionality
+*   **Smart Folder Organization**: Create and manage multiple study sets with a unique, persistent folder system.
+*   **Rich Media Support**: Seamlessly integrate images into both terms and definitions via copy-paste functionality.
+*   **Interactive Study Mode**: Fluid, 3D-animated flip cards with keyboard and on-screen navigation controls.
+*   **Responsive Design**: Fully responsive interface that adapts to desktop, tablet, and mobile devices.
+*   **Persistent Storage**: Auto-saving mechanism using Local Storage ensures data is never lost between sessions.
 
-### `npm start`
+### User Experience (UX)
+*   **Ultra-Dark Theme**: A carefully crafted, high-contrast dark mode designed to reduce eye strain during long study sessions.
+*   **Masonry Layout**: Aesthetic, Pinterest-style grid layout for efficiently browsing large collections of terms.
+*   **Focus Mode**: Collapsible sidebar to maximize screen real estate for focused studying.
+*   **Intuitive Controls**: Simple, accessible controls for adding, editing, and deleting content.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This project leverages a modern frontend stack to deliver a fast and responsive user experience.
 
-### `npm test`
+### Core Frameworks
+*   **React.js**: A JavaScript library for building user interfaces, utilized for its component-based architecture and efficient virtual DOM.
+*   **React Router v6**: Implements dynamic, client-side routing for a seamless single-page application (SPA) experience.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Styling & UI
+*   **Tailwind CSS**: A utility-first CSS framework used for rapid UI development, ensuring consistent design tokens and responsive behavior.
+*   **CSS3**: Custom animations and 3D transforms (preserve-3d, backface-visibility) used for the card flip interactions.
 
-### `npm run build`
+### State Management & Storage
+*   **React Context API**: Centralized state management for handling global data like folders and flashcard sets.
+*   **Local Storage API**: Client-side persistence layer to store user data directly in the browser.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Development Tools
+*   **Git**: Version control system for tracking changes and collaboration.
+*   **npm**: Package manager for dependency handling.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 📦 Installation & Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run this project locally on your machine:
 
-### `npm run eject`
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/ninas-flashcards.git
+    cd ninas-flashcards
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3.  **Start the development server**
+    ```bash
+    npm start
+    ```
+    The application will launch automatically at `http://localhost:3000`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🤝 Contributing
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Learn More
+## 📄 License
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is open source and available under the [MIT License](LICENSE).
