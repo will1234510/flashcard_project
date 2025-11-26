@@ -17,10 +17,10 @@ function Sidebar() {
       setIsCreating(false);
       return;
     }
-    const newId = addFolder(newFolderName);
+    addFolder(newFolderName);
     setNewFolderName('');
     setIsCreating(false);
-    navigate(`/folder/${newId}`);
+    // navigate(`/folder/${newId}`); // auto-navigation removed
   };
 
   // handles folder deletion with confirmation

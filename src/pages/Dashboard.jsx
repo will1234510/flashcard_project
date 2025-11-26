@@ -1,24 +1,46 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useFlashcards } from '../context/FlashcardContext';
 
 // dashboard component (home page)
 // displays a grid of all available folders and allows creating/deleting them
 function Dashboard() {
-  const { folders, addFolder, deleteFolder } = useFlashcards();
+  const { folders, addFolder, deleteFolder, renameFolder } = useFlashcards();
   const [newFolderName, setNewFolderName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
-  const navigate = useNavigate();
+  const [editingFolderId, setEditingCardId] = useState(null);
+  const [editName, setEditName] = useState('');
 
   // creates a new folder and navigates to it
   const handleCreateFolder = (e) => {
     e.preventDefault();
     if (!newFolderName.trim()) return;
     
-    const newId = addFolder(newFolderName);
+    addFolder(newFolderName);
     setNewFolderName('');
     setIsCreating(false);
-    navigate(`/folder/${newId}`);
+  };
+
+  const startEditing = (e, folder) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingCardId(folder.id);
+    setEditName(folder.name);
+  };
+
+  const saveEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (editName.trim()) {
+      renameFolder(editingFolderId, editName);
+    }
+    setEditingCardId(null);
+  };
+
+  const cancelEdit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditingCardId(null);
   };
 
   // deletes a folder with confirmation
@@ -75,32 +97,69 @@ function Dashboard() {
         </div>
       )}
 
-      {/* masonry grid layout for folders */}
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+      {/* grid layout for folders (2 columns default, responsive) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {folders.map(folder => (
           <Link 
             key={folder.id} 
             to={`/folder/${folder.id}`}
-            className="block bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-xl p-6 transition-all hover:shadow-lg hover:border-gray-600 group relative break-inside-avoid mb-4"
+            className="block bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-xl p-6 transition-all hover:shadow-lg hover:border-gray-600 group relative"
           >
-            <div className="flex justify-between items-center">
-              <div>
-                <h3 className="text-xl font-bold text-gray-100 group-hover:text-white transition-colors">
-                  {folder.name}
-                </h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  {folder.flashcards.length} {folder.flashcards.length === 1 ? 'term' : 'terms'}
-                </p>
+            <div className="flex justify-between items-center h-full">
+              <div className="flex-grow mr-4">
+                {editingFolderId === folder.id ? (
+                  <div className="flex items-center gap-2" onClick={(e) => e.preventDefault()}>
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      className="bg-black text-white px-2 py-1 rounded border border-gray-700 w-full"
+                      autoFocus
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    <button onClick={saveEdit} className="text-green-500 hover:text-green-400 p-1">✓</button>
+                    <button onClick={cancelEdit} className="text-red-500 hover:text-red-400 p-1">✕</button>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="text-xl font-bold text-gray-100 group-hover:text-white transition-colors truncate">
+                      {folder.name}
+                    </h3>
+                    <p className="text-gray-400 text-sm mt-1 flex items-center gap-2">
+                      <span>{folder.flashcards.length} {folder.flashcards.length === 1 ? 'term' : 'terms'}</span>
+                      {folder.flashcards.filter(card => card.isFlagged).length > 0 && (
+                        <span className="flex items-center text-yellow-500/80">
+                          <span className="mr-1">•</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          {folder.flashcards.filter(card => card.isFlagged).length} starred
+                        </span>
+                      )}
+                    </p>
+                  </>
+                )}
               </div>
-              <button 
-                onClick={(e) => handleDelete(e, folder.id)}
-                className="text-gray-600 hover:text-red-400 p-2 opacity-0 group-hover:opacity-100 transition-opacity"
-                title="Delete folder"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
+              <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <button 
+                  onClick={(e) => startEditing(e, folder)}
+                  className="text-gray-600 hover:text-white p-2 mr-1"
+                  title="Rename folder"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                </button>
+                <button 
+                  onClick={(e) => handleDelete(e, folder.id)}
+                  className="text-gray-600 hover:text-red-400 p-2"
+                  title="Delete folder"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </Link>
         ))}

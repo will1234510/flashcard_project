@@ -30,13 +30,19 @@ export const FlashcardProvider = ({ children }) => {
     localStorage.setItem('flashcard_folders_v1', JSON.stringify(folders));
   }, [folders]);
 
-  // creates a new folder with a unique id
+  // creates a new folder with a unique id and 3 default flashcards
   // returns: string id of the newly created folder
   const addFolder = (name) => {
+    const defaultCards = [
+      { id: Date.now(), term: 'Term 1', definition: 'Definition 1', termImage: '', definitionImage: '', isFlagged: false },
+      { id: Date.now() + 1, term: 'Term 2', definition: 'Definition 2', termImage: '', definitionImage: '', isFlagged: false },
+      { id: Date.now() + 2, term: 'Term 3', definition: 'Definition 3', termImage: '', definitionImage: '', isFlagged: false }
+    ];
+
     const newFolder = {
       id: Date.now().toString(),
       name,
-      flashcards: []
+      flashcards: defaultCards
     };
     setFolders([...folders, newFolder]);
     return newFolder.id;
@@ -48,7 +54,47 @@ export const FlashcardProvider = ({ children }) => {
       if (folder.id === folderId) {
         return {
           ...folder,
-          flashcards: [...folder.flashcards, { ...card, id: Date.now() }]
+          flashcards: [...folder.flashcards, { ...card, id: Date.now(), isFlagged: false }]
+        };
+      }
+      return folder;
+    }));
+  };
+
+  // updates an existing flashcard in a specific folder
+  const updateFlashcard = (folderId, updatedCard) => {
+    setFolders(folders.map(folder => {
+      if (folder.id === folderId) {
+        return {
+          ...folder,
+          flashcards: folder.flashcards.map(card => 
+            card.id === updatedCard.id ? updatedCard : card
+          )
+        };
+      }
+      return folder;
+    }));
+  };
+
+  // renames a folder
+  const renameFolder = (folderId, newName) => {
+    setFolders(folders.map(folder => {
+      if (folder.id === folderId) {
+        return { ...folder, name: newName };
+      }
+      return folder;
+    }));
+  };
+
+  // toggles the flagged status of a flashcard
+  const toggleFlashcardFlag = (folderId, cardId) => {
+    setFolders(folders.map(folder => {
+      if (folder.id === folderId) {
+        return {
+          ...folder,
+          flashcards: folder.flashcards.map(card => 
+            card.id === cardId ? { ...card, isFlagged: !card.isFlagged } : card
+          )
         };
       }
       return folder;
@@ -61,7 +107,7 @@ export const FlashcardProvider = ({ children }) => {
   };
 
   return (
-    <FlashcardContext.Provider value={{ folders, addFolder, addFlashcard, deleteFolder }}>
+    <FlashcardContext.Provider value={{ folders, addFolder, addFlashcard, updateFlashcard, renameFolder, toggleFlashcardFlag, deleteFolder }}>
       {children}
     </FlashcardContext.Provider>
   );

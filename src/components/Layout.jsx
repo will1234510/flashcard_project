@@ -27,7 +27,8 @@ function Layout() {
           <Link to="/" className="text-white font-bold text-2xl tracking-tight">Nina's Flashcards</Link>
         </div>
         <nav className="space-x-6 hidden md:block">
-          <Link to="/" className="text-gray-300 font-semibold border-b-2 border-white py-4">Flashcards</Link>
+          <Link to="/" className="text-gray-300 hover:text-white font-semibold border-b-2 border-white py-4 transition-colors">Flashcards</Link>
+          <span className="text-gray-500 font-semibold py-4">Test (WIP)</span>
         </nav>
       </header>
 

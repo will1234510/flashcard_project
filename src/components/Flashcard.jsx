@@ -5,7 +5,7 @@ import React from 'react';
 function Flashcard({ term, definition, termImage, definitionImage, isFlipped, onFlip }) {
   return (
     <div
-      className="perspective-1000 w-full h-96 cursor-pointer max-w-2xl mx-auto"
+      className="perspective-1000 w-full h-96 cursor-pointer max-w-2xl mx-auto relative group"
       onClick={onFlip}
     >
       <div

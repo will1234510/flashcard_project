@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-// form component for adding new flashcards
+// form component for adding/editing flashcards
 // allows entering text or pasting images for both term and definition
-function FlashcardForm({ onAddFlashcard }) {
-  const [term, setTerm] = useState('');
-  const [definition, setDefinition] = useState('');
-  const [termImage, setTermImage] = useState('');
-  const [definitionImage, setDefinitionImage] = useState('');
+function FlashcardForm({ onAddFlashcard, initialData = null, onCancel = null }) {
+  const [term, setTerm] = useState(initialData?.term || '');
+  const [definition, setDefinition] = useState(initialData?.definition || '');
+  const [termImage, setTermImage] = useState(initialData?.termImage || '');
+  const [definitionImage, setDefinitionImage] = useState(initialData?.definitionImage || '');
   const [isOpen, setIsOpen] = useState(false);
 
-  // validates inputs and calls parent handler to add card
+  useEffect(() => {
+    if (initialData) {
+      setTerm(initialData.term || '');
+      setDefinition(initialData.definition || '');
+      setTermImage(initialData.termImage || '');
+      setDefinitionImage(initialData.definitionImage || '');
+      setIsOpen(true);
+    }
+  }, [initialData]);
+
+  // validates inputs and calls parent handler to add/update card
   const handleSubmit = (e) => {
     e.preventDefault();
     // allow submission if at least one field (term/def) has content or an image
@@ -18,24 +28,42 @@ function FlashcardForm({ onAddFlashcard }) {
 
     if (!hasTermContent || !hasDefinitionContent) return;
 
-    onAddFlashcard({ term, definition, termImage, definitionImage });
-    // reset form state
-    setTerm('');
-    setDefinition('');
-    setTermImage('');
-    setDefinitionImage('');
-    setIsOpen(false);
+    onAddFlashcard({ 
+      ...initialData, // keep existing id if editing
+      term, 
+      definition, 
+      termImage, 
+      definitionImage 
+    });
+    
+    // reset form state only if not editing (or close if editing)
+    if (initialData) {
+        if(onCancel) onCancel();
+    } else {
+        setTerm('');
+        setDefinition('');
+        setTermImage('');
+        setDefinitionImage('');
+        setIsOpen(false);
+    }
   };
 
-  // show a simple button if the form is closed
-  if (!isOpen) {
+  const handleCancel = () => {
+    setIsOpen(false);
+    if (onCancel) onCancel();
+  };
+
+  // show a simple button if the form is closed and not in edit mode
+  if (!isOpen && !initialData) {
     return (
-      <button 
-        onClick={() => setIsOpen(true)}
-        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded shadow-md transition-colors"
-      >
-        + Add Card
-      </button>
+      <div className="flex justify-center w-full">
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded shadow-md transition-colors"
+        >
+          + Add Card
+        </button>
+      </div>
     );
   }
 
@@ -59,10 +87,10 @@ function FlashcardForm({ onAddFlashcard }) {
   };
 
   return (
-    <div className="bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-800 w-full max-w-2xl mt-8">
+    <div className="bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-800 w-full max-w-2xl mx-auto mt-8">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-300">Create new flashcard</h2>
-        <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-300">
+        <h2 className="text-xl font-bold text-gray-300">{initialData ? 'Edit flashcard' : 'Create new flashcard'}</h2>
+        <button onClick={handleCancel} className="text-gray-500 hover:text-gray-300">
           ✕
         </button>
       </div>
@@ -81,8 +109,9 @@ function FlashcardForm({ onAddFlashcard }) {
                 onChange={(e) => setTerm(e.target.value)}
                 onPaste={(e) => handlePaste(e, setTermImage)}
                 className="appearance-none block w-full bg-black text-gray-200 border-b-2 border-gray-700 py-2 px-4 leading-tight focus:outline-none focus:border-gray-500 focus:bg-black placeholder-gray-700 mb-2"
-                placeholder="Enter term or paste image (Ctrl+V)"
+                placeholder="Enter term or paste image"
                 autoFocus
+                autoComplete="off"
               />
             )}
             {termImage && (
@@ -113,7 +142,8 @@ function FlashcardForm({ onAddFlashcard }) {
                 onChange={(e) => setDefinition(e.target.value)}
                 onPaste={(e) => handlePaste(e, setDefinitionImage)}
                 className="appearance-none block w-full bg-black text-gray-200 border-b-2 border-gray-700 py-2 px-4 leading-tight focus:outline-none focus:border-gray-500 focus:bg-black placeholder-gray-700 mb-2"
-                placeholder="Enter definition or paste image (Ctrl+V)"
+                placeholder="Enter definition or paste image"
+                autoComplete="off"
               />
             )}
             {definitionImage && (
@@ -133,12 +163,21 @@ function FlashcardForm({ onAddFlashcard }) {
             )}
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-4">
+          {initialData && (
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded focus:outline-none focus:shadow-outline transition-colors"
+            >
+              Cancel
+            </button>
+          )}
           <button
             type="submit"
             className="bg-white hover:bg-gray-200 text-black font-bold py-3 px-8 rounded focus:outline-none focus:shadow-outline transition-colors"
           >
-            Create
+            {initialData ? 'Save' : 'Create'}
           </button>
         </div>
       </form>
