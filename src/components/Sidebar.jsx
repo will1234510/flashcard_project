@@ -34,7 +34,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="w-64 bg-black text-gray-300 flex flex-col h-full overflow-y-auto border-r border-gray-800 md:border-none">
+    <div className="w-64 bg-black text-gray-300 flex flex-col h-full overflow-y-auto">
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
           <NavLink to="/" className="text-sm font-bold text-gray-500 uppercase tracking-wider hover:text-white transition-colors">

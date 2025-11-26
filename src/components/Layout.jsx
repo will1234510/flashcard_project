@@ -10,7 +10,7 @@ function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="h-screen overflow-hidden bg-black flex flex-col">
       {/* header section with logo, toggle button, and navigation */}
       <header className="bg-gray-900 shadow-sm h-16 flex items-center justify-between px-4 sm:px-8 border-b border-gray-800 sticky top-0 z-20">
         <div className="flex items-center gap-4">
