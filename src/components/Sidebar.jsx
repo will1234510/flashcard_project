@@ -22,7 +22,7 @@ function Sidebar() {
     setIsCreating(false);
     // navigate(`/folder/${newId}`); // auto-navigation removed
   };
-
+//hi
   // handles folder deletion with confirmation
   const handleDelete = (e, id) => {
     e.preventDefault(); // prevent navigation
